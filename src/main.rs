@@ -6,7 +6,7 @@ mod other;
 use std::env;
 
 use actix_web::{App, HttpServer, web::{self, Data}};
-use handlers::user_handler;
+
 use sqlx::postgres::PgPoolOptions;
 use log::{info, error};
 
@@ -24,9 +24,9 @@ async fn main() -> std::io::Result<()> {
 
     HttpServer::new(move || {
         App::new()
-            .app_data(web::Data::new(db_pool.clone()))
+            // .app_data(web::Data::new(db_pool.clone()))
             .configure(routes::all_routes::config_routes)
-            .wrap_fn(|req, srv| user_handler::auth_middleware(req, srv, Data::new(db_pool.clone())))
+            // .wrap_fn(|req, srv| user_handler::auth_middleware(req, srv, Data::new(db_pool.clone())))
     })
     .bind(("127.0.0.1", 8080))?
     .run()

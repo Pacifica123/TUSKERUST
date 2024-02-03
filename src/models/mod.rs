@@ -1,2 +1,1 @@
-pub mod form_models;
-pub mod main_models;
+pub mod RegistrationRequest;
