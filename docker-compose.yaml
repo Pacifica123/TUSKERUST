@@ -1,0 +1,10 @@
+version: '3.8'
+services:
+  db_auth:
+    container_name: db_auth
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_PASSWORD=Noir_Tea
+      - POSTGRES_USER=noir
+    image: postgres:16.1-alpine
