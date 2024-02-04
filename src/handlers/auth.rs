@@ -35,3 +35,35 @@ pub async fn register(
         }),
     }
 }
+
+
+pub async fn login(
+    form: web::Json<models::LoginRequest::LoginRequest>,
+    pool: web::Data<PgPool>,
+) -> impl Responder
+// Result<HttpResponse, actix_web::Error> 
+{
+    // лог регистрационных данных в консоль
+    println!("Login request: {:?}", form);
+    let result = sqlx::query!(
+        r#"
+        SELECT * FROM simple_users WHERE email = $1 AND password = $2
+        "#,
+        form.email,
+        form.password
+    )
+    .fetch_one(pool.get_ref())
+    .await;
+    
+    match result {
+        Ok(_) => web::Json(models::LoginRequest::LoginResponse {
+            success: true,
+            message: "thsisistokenforemail_".to_string() + &form.email,
+        }),
+        Err(_) => web::Json(models::LoginRequest::LoginResponse {
+            success: false,
+            message: "Failed to login user".to_string(),
+        }),
+        
+    }
+}
