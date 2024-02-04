@@ -17,14 +17,18 @@ async fn main() -> std::io::Result<()> {
     std::env::set_var("RUST_LOG", "debug");
     env_logger::init();
     // Создаем пул соединений с базой данных
-    // let db_pool = PgPoolOptions::new()
-    //     .max_connections(10)
-    //     .connect(env::var("DATABASE_URL").expect("DATABASE_URL must be set").as_str())
-    //     .await
-    //     .expect("Failed to connect to the database");
+
+    let databasse_url = "postgres://noir:Noir_Tea@localhost:5432/test";
+    let db_pool = PgPoolOptions::new()
+        .max_connections(10)
+        .connect(databasse_url)
+        .await
+        .expect("Failed to connect to the database");
+    info!("Connected to the database");
 
     HttpServer::new(move || {
         App::new()
+            .app_data(web::Data::new(db_pool.clone()))
             .wrap(
                 Cors::default()
                 .allowed_origin("http://localhost:4200") // Разрешенный origin
