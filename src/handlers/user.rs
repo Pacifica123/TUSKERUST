@@ -17,7 +17,9 @@ pub async fn user_info(
     .fetch_one(pool.get_ref())
     .await;
     
-    
+    // debug: 
+    println!("{:?}", result);
+
     // Если все без ошибок то возвращаем информацию, если ошибка то возвращаем ошибку
     match result {
         Ok(user) => web::Json(models::User::UserInfo {
